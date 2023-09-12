@@ -11,9 +11,26 @@ class InvoicesController < ApplicationController
     # if current_user.last_pull_from_xero > 24.hours.ago
     # else
 
-    puts current_user.inspect
+    clients = params[:clients]
+    status = params[:status]
 
-    @invoices = Invoice.where(user_id: current_user.id)
+    query = Invoice.all
+
+    if clients.present?
+      query = query.where(client: clients)
+    end
+
+    if status.present?
+      query = query.where(status: status)
+    end
+
+
+    puts "clients #{clients}"
+    puts "status #{status}"
+
+    @invoices = query.order(:due_date).to_a
+
+
   end
 
   def connect
