@@ -2,10 +2,15 @@ module ApplicationHelper
     require 'jwt'
 
     def token_expired
-        token_expiry = Time.at(access_token['exp'])
-        puts "token_expiry #{token_expiry}"
-        puts "Time.now #{Time.now}"    
-        return token_expiry < Time.now
+        puts current_user.inspect
+        if access_token.nil?
+            return true
+        else access_token['exp']
+            token_expiry = Time.at(access_token['exp'])
+            puts "token_expiry #{token_expiry}"
+            puts "Time.now #{Time.now}"    
+            return token_expiry < Time.now
+        end
     end
 
     def id_token

@@ -27,6 +27,7 @@ class InvoicesController < ApplicationController
     else
       puts "token not expired"
       @xero_client.set_token_set(current_user.token_set)
+      @token_set = current_user.token_set
     end
 
     current_user.token_set = @token_set
@@ -34,7 +35,11 @@ class InvoicesController < ApplicationController
     current_user.save!
 
     xero_invoices = @xero_client.accounting_api.get_invoices(current_user.active_tenant_id).invoices
-    for invoice in xero_invoices
+    invoice_db_records = xero_invoices_to_db(xero_invoices)
+    # grouped_invoices = xero_invoices.index_by { |invoice| invoice[:InvoiceID] }
+    # Invoice.update(grouped_users.keys, grouped_users.values)
+
+    for invoice in invoice_db_records
       puts "----------------------------------------------"
       puts "invoice #{invoice}"
     end
