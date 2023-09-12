@@ -6,6 +6,9 @@
         <div>
         <% if !current_user.xero_connected %>
             <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>            
+        <% else %>
+            <a class="btn btn-primary" href="/xero/connect" role="button">Manual Refresh</a>          
+            <a class="btn btn-primary" href="/xero/connect" role="button">Logout</a>          
         <% end %>
         </div>
     </div>
@@ -13,7 +16,7 @@
     <hr/>
 
     <% if current_user.xero_connected %>
-        <div class="table-responsive">
+        <div class="table-responsive card">
             <table class="table">
             <thead>
                 <tr>

@@ -34,7 +34,7 @@ class InvoicesController < ApplicationController
 
     @invoices = invoice_db_records
 
-    render "index"
+    redirect_to "/"
 
   end
 
