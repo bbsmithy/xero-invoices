@@ -72,8 +72,7 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
-
 gem "bcrypt", "~> 3.1"
-
 gem 'xero-ruby'
+gem 'jwt'
 

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "invoices#index"
   get "/invoices", to: "invoices#index"
+  get "/invoices/refresh", to: "invoices#pull_from_xero"
 
   get "/xero/connect", to: "invoices#connect"
   get "/xero/callback", to: "invoices#connect_callback"
