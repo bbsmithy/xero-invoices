@@ -27,8 +27,8 @@ module ApplicationHelper
         @xero_client = XeroRuby::ApiClient.new(credentials: {
             client_id: '3C32F4B4DA3B46C3B56D2B4D8C574068',
             client_secret: 'GCB9SesCl4SK-csORBBTPrfnJVITR7_UB5f1kas9Pg3U4dAJ',
-            redirect_uri: 'https://borealsoftwarelabs.com',
-            scopes: 'openid profile email accounting.transactions accounting.settings offline_access'
+            redirect_uri: 'http://localhost:3000/xero/callback',
+            scopes: 'openid profile email accounting.transactions offline_access'
         })
 
         # if current_user&.token_set
