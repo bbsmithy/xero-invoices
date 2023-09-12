@@ -8,7 +8,7 @@
             <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>            
         <% else %>
             <a class="btn btn-primary" href="/xero/connect" role="button">Manual Refresh</a>          
-            <a class="btn btn-primary" href="/xero/connect" role="button">Logout</a>          
+            <a class="btn btn-primary" href="/user/sign_out" data-method="delete" role="button">Logout</a>          
         <% end %>
         </div>
     </div>
@@ -18,15 +18,15 @@
     <% if current_user.xero_connected %>
         <div class="table-responsive card">
             <table class="table">
-            <thead>
+            <thead class="fixed-header">
                 <tr>
                 <th>Client</th>
                 <th>Xero Id</th>
                 <th>Outstanding Amount</th>
                 <th>Total Amount</th>
+                <th>Status</th>
                 <th>Due Date</th>
-                <th>Create At</th>
-                <th>Last Updated</th>
+                <th>User id</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,11 +34,25 @@
                 <tr>
                     <td><a href="/invoices/<%= invoice.id %>"><%= invoice.client %></a></td>
                     <td><%= invoice.xero_id %></td>
-                    <td><%= invoice.outstanding_amount %></td>
-                    <td><%= invoice.total_amount %></td>
-                    <td><%= invoice.due_date %></td>
-                    <td><%= invoice.created_at %></td>
-                    <td><%= invoice.updated_at %></td>
+                    <td>
+                        <%= invoice.currency_symbol %>
+                        <%= invoice.outstanding_amount %>
+                    </td>
+                    <td>
+                        <%= invoice.currency_symbol %>
+                        <%= invoice.total_amount %>
+                    </td>
+                    <td>
+                    <% case invoice.status
+                        when "PAID" %><span class="badge text-uppercase bg-success"><%= invoice.status %></span>
+                        <% when "AUTHORISED" %><span class="badge text-uppercase bg-primary"><%= invoice.status %></span>
+                        <% when "VOIDED" %><span class="badge text-uppercase bg-warning"><%= invoice.status %></span>
+                        <% when "DRAFT" %><span class="badge text-uppercase bg-info"><%= invoice.status %></span>
+                        <% else %><span class="badge text-uppercase bg-danger"><%= invoice.status %></span>
+                    <% end %>
+                        
+                    </td>
+                    <td><%= invoice.due_date.strftime("%d-%m-%Y") %></td>
                 </tr>
                 <% end %>
             </tbody>

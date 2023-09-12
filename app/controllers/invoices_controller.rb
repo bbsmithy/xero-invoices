@@ -7,7 +7,7 @@ class InvoicesController < ApplicationController
   before_action :xero_client
   
   def index
-    @invoices = Invoice.all
+    @invoices = Invoice.where(user_id: current_user.id)
   end
 
   def connect
@@ -15,27 +15,28 @@ class InvoicesController < ApplicationController
   end
 
   def connect_callback
-    @xero_client.get_token_set_from_callback(params)
-    tenant_id = @xero_client.connections.last['tenantId']
-    User.update(current_user.id, xero_connected: true).save
+    if params['code']
+      @token_set = @xero_client.get_token_set_from_callback(params)
+      # you can use `@xero_client.connections` to fetch info about which orgs
+      # the user has authorized and the most recently connected tenant_id
+      current_user.token_set = @token_set if !@token_set["error"]
+      current_user.token_set['connections'] = @xero_client.connections
+      current_user.active_tenant_id = latest_connection(current_user.token_set['connections'])
+      current_user.xero_connected = true
+      current_user.save!
 
-    puts "tenant_id #{tenant_id}"
+      # fetch invoices for the connected org
+      xero_invoices = @xero_client.accounting_api.get_invoices(current_user.active_tenant_id).invoices
+      invoice_db_records = xero_invoices_to_db(xero_invoices)
 
-    xero_invoices = @xero_client.accounting_api.get_invoices(tenant_id).invoices
+      Invoice.create(invoice_db_records)
+      redirect_to "/"
 
-    invoice_db_records = xero_invoices_to_db(xero_invoices)
-
-    for invoice in invoice_db_records do
-      puts "-----------------------------------------"
-      puts "invoice #{invoice}"
+    else
+      redirect_to "/"
+      flash.notice = "Failed to received Xero Token Set"
     end
-
-    Invoice.create(invoice_db_records)
-
-    @invoices = invoice_db_records
-
-    redirect_to "/"
-
+  
   end
 
 end

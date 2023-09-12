@@ -1,17 +1,39 @@
 module InvoicesHelper
 
+    def currency_code_to_symbol(currency_code)
+        case currency_code
+        when "USD"
+            return "$"
+        when "GBP"
+            return "£"
+        when "EUR"
+            return "€"
+        else
+            return currency_code
+        end
+    end
+
     def xero_invoices_to_db(xero_invoices)
         invoices = []
         xero_invoices.each do |xero_invoice|
+
+            puts "#{current_user}"
+
             invoice_to_store = {
                 client: xero_invoice.contact.name,
                 xero_id: xero_invoice.invoice_number,
                 outstanding_amount: xero_invoice.amount_due,
                 total_amount: xero_invoice.total,
+                status: xero_invoice.status,
+                currency_code: xero_invoice.currency_code,
+                currency_symbol: currency_code_to_symbol(xero_invoice.currency_code),
                 due_date: xero_invoice.due_date,
                 updated_at: xero_invoice.updated_date_utc,
-                created_at: xero_invoice.date
+                created_at: xero_invoice.date,
+                user_id: current_user.id
             }
+
+            # puts "invoice_to_store #{invoice_to_store.user_id}"
 
             invoices << invoice_to_store
 
