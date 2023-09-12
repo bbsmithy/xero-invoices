@@ -4,7 +4,9 @@
             <h1>📑 My Invoices</h1>
         </div>
         <div>
-            <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>
+        <% if !current_user.xero_connected %>
+            <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>            
+        <% end %>
         </div>
     </div>
 
