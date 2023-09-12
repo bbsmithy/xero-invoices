@@ -7,7 +7,7 @@
         <% if !current_user.xero_connected %>
             <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>            
         <% else %>
-            <a class="btn btn-primary" href="/invoices/refresh" role="button">Manual Refresh</a>          
+            <a class="btn btn-primary" href="/invoices/refresh" role="button">Sync</a>          
             <a class="btn btn-primary" href="/user/sign_out" data-method="delete" role="button">Logout</a>          
         <% end %>
         </div>

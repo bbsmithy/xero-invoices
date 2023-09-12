@@ -36,13 +36,8 @@ class InvoicesController < ApplicationController
 
     xero_invoices = @xero_client.accounting_api.get_invoices(current_user.active_tenant_id).invoices
     invoice_db_records = xero_invoices_to_db(xero_invoices)
-    # grouped_invoices = xero_invoices.index_by { |invoice| invoice[:InvoiceID] }
-    # Invoice.update(grouped_users.keys, grouped_users.values)
 
-    for invoice in invoice_db_records
-      puts "----------------------------------------------"
-      puts "invoice #{invoice}"
-    end
+    Invoice.upsert_all(invoice_db_records, unique_by: :xero_invoice_id)
 
     redirect_to "/"
 

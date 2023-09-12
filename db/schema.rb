@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_12_200151) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_12_230452) do
   create_table "articles", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -30,6 +30,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_200151) do
     t.string "currency_code"
     t.string "currency_symbol"
     t.integer "user_id"
+    t.string "xero_invoice_id"
+    t.string "xero_invoice_number"
+    t.index ["xero_invoice_id"], name: "index_invoices_on_xero_invoice_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

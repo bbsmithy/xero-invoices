@@ -17,11 +17,10 @@ module InvoicesHelper
         invoices = []
         xero_invoices.each do |xero_invoice|
 
-            puts "#{current_user}"
-
             invoice_to_store = {
                 client: xero_invoice.contact.name,
-                xero_id: xero_invoice.invoice_number,
+                xero_invoice_number: xero_invoice.invoice_number,
+                xero_invoice_id: xero_invoice.invoice_id,
                 outstanding_amount: xero_invoice.amount_due,
                 total_amount: xero_invoice.total,
                 status: xero_invoice.status,
