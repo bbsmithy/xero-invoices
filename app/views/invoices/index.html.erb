@@ -1,0 +1,50 @@
+<div class="container w-75 mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>📑 My Invoices</h1>
+        </div>
+        <div>
+            <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <% if current_user.xero_connected %>
+        <div class="table-responsive">
+            <table class="table">
+            <thead>
+                <tr>
+                <th>Client</th>
+                <th>Xero Id</th>
+                <th>Outstanding Amount</th>
+                <th>Total Amount</th>
+                <th>Due Date</th>
+                <th>Create At</th>
+                <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @invoices.each do |invoice| %>
+                <tr>
+                    <td><a href="/invoices/<%= invoice.id %>"><%= invoice.client %></a></td>
+                    <td><%= invoice.xero_id %></td>
+                    <td><%= invoice.outstanding_amount %></td>
+                    <td><%= invoice.total_amount %></td>
+                    <td><%= invoice.due_date %></td>
+                    <td><%= invoice.created_at %></td>
+                    <td><%= invoice.updated_at %></td>
+                </tr>
+                <% end %>
+            </tbody>
+            </table>
+        </div>
+    <% else %>
+        <div class="text-center mt-5">
+            <p class="text-color-gray">Connect to Xero to see your invoices</p>
+        </div>
+    <% end %>
+
+
+    
+</div>
