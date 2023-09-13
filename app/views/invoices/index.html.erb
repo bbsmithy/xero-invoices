@@ -50,7 +50,7 @@
             <thead class="fixed-header">
                 <tr>
                 <th>Client</th>
-                <th>Xero Id</th>
+                <th>Xero Number</th>
                 <th>Outstanding Amount</th>
                 <th>Total Amount</th>
                 <th>Status</th>
@@ -61,7 +61,7 @@
                 <% @invoices.each do |invoice| %>
                 <tr>
                     <td><a href="/invoices/<%= invoice.id %>"><%= invoice.client %></a></td>
-                    <td><%= invoice.xero_id %></td>
+                    <td><%= invoice.xero_invoice_number %></td>
                     <td>
                         <%= invoice.currency_symbol %>
                         <%= invoice.outstanding_amount %>
