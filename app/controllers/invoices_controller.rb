@@ -40,7 +40,7 @@ class InvoicesController < ApplicationController
   end
 
   def connect
-    redirect_to @xero_client.authorization_url, allow_other_host: true
+    redirect_to xero_client.authorization_url, allow_other_host: true
   end
 
   def pull_from_xero
@@ -85,7 +85,7 @@ class InvoicesController < ApplicationController
       xero_invoices = @xero_client.accounting_api.get_invoices(current_user.active_tenant_id).invoices
       invoice_db_records = xero_invoices_to_db(xero_invoices)
 
-      Invoice.create(invoice_db_records)
+      Invoice.upsert_all(invoice_db_records, unique_by: :xero_invoice_id)
       redirect_to "/"
 
     else

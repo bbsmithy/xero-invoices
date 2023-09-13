@@ -23,7 +23,11 @@ module ApplicationHelper
 
     def xero_client
 
-        callback_uri = Rails.env.production ? 'https://jellyfish-app-nnkkl.ondigitalocean.app/xero/callback' : 'http://localhost:3000/xero/callback'
+        puts "Setting up @xero_client"
+        puts Rails.env.inspect
+        callback_uri = Rails.env === "production" ? 'https://jellyfish-app-nnkkl.ondigitalocean.app/xero/callback' : 'http://localhost:3000/xero/callback'
+        
+        puts "callback_uri #{callback_uri}"
         
         @xero_client = XeroRuby::ApiClient.new(credentials: {
             client_id: '3C32F4B4DA3B46C3B56D2B4D8C574068',
@@ -31,6 +35,11 @@ module ApplicationHelper
             redirect_uri: callback_uri,
             scopes: 'openid profile email accounting.transactions offline_access'
         })
+
+        if current_user && current_user.token_set
+            puts "current_user.token_set #{current_user.token_set}"
+            @xero_client.set_token_set(current_user.token_set)
+        end
 
         return @xero_client
     end
