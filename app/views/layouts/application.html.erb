@@ -15,39 +15,54 @@
     <%= yield %>
   </body>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script>
+    // Get all the dropdown options
+    const clientOptions = document.querySelectorAll('.client-option');
+    const statusOptions = document.querySelectorAll('.status-option');
 
-<script>
-  // Assuming you have a <select> element with id="clientDropdown"
-  const dropdown = document.getElementById("clientDropdown");
-
-  dropdown.addEventListener("change", function() {
-    const selectedOption = this.options[this.selectedIndex];
-    const clientName = selectedOption.value;
-
-    // Get the current URL
-    let url = window.location.href;
+    console.log(clientOptions)
+    console.log(statusOptions)
     
-    // Check if the 'clients' parameter already exists in the URL
-    if (url.includes("?clients=")) {
-      // Extract the current value of the 'clients' parameter
-      const params = new URLSearchParams(window.location.search);
-      let clientsParamValue = params.get("clients");
-
-      // Append the client name to the existing 'clients' parameter
-      clientsParamValue += `,${clientName}`;
-
-      // Update the 'clients' parameter in the URL
-      url = url.replace(/(clients=)([^&]*)/, `$1${clientsParamValue}`);
-    } else {
-      // Add the 'clients' parameter to the URL
-      url += `?clients=${clientName}`;
-    }
+    // Add click event listener to each dropdown option
+    clientOptions.forEach(option => {
+      option.addEventListener('click', (event) => {
+        // Get the selected client from the clicked option
+        const selectedClient = event.target.textContent;
+        
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        if (selectedClient === "All Clients") {
+          // Remove the URL query parameter 'clients'
+          urlSearchParams.delete('clients');
+        } else {
+          // Update the URL query parameter 'clients' with the selected client
+          urlSearchParams.set('clients', selectedClient);
+        }
+        // Replace the current URL with the updated URL including the new query parameter
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlSearchParams}`);
+        location.reload();
+      });
+    });
     
-    // Update the browser URL without reloading the page
-    history.pushState({ path: url }, '', url);
-  });
-</script>
+    statusOptions.forEach(option => {
+      option.addEventListener('click', (event) => {
+        // Get the selected status from the clicked option
+        const selectedStatus = event.target.textContent;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        
+        if (selectedStatus === "All Status") {
+          urlSearchParams.delete('status');
+        } else {
+          urlSearchParams.set('status', selectedStatus);
+        }
+    
+        // Replace the current URL with the updated URL including the new query parameter
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlSearchParams}`);
+        location.reload();
+      });
+    });
+    </script>
 
 </html>

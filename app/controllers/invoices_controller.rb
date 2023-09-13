@@ -28,8 +28,14 @@ class InvoicesController < ApplicationController
     puts "clients #{clients}"
     puts "status #{status}"
 
-    @invoices = query.order(:due_date).to_a
+    @current_client_filter = clients
+    @current_status_filter = status
 
+    puts @current_client_filter.inspect
+
+    @invoices = query.order(:due_date).to_a
+    @clients = Invoice.all.pluck(:client).uniq
+    @statuses = Invoice.all.pluck(:status).uniq
 
   end
 

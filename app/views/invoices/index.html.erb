@@ -7,34 +7,37 @@
         <% if !current_user.xero_connected %>
             <a class="btn btn-primary" href="/xero/connect" role="button">Connect Xero</a>            
         <% else %>
-            <a class="btn btn-primary" href="/invoices/refresh" role="button">Sync</a>          
+            <a class="btn btn-primary" href="/invoices/refresh" role="button">Sync Xero</a>          
             <a class="btn btn-primary" href="/user/sign_out" data-method="delete" role="button">Logout</a>          
         <% end %>
         </div>
     </div>
 
     <hr/>
+    <h1><% @current_client_filter %></h1>
 
     <% if current_user.xero_connected %>
         <div class="d-flex flex-direction-row">
             <div class="dropdown mb-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Clients
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="clientDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span><%= @current_client_filter || "All Clients" %></span>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                <div class="dropdown-menu" aria-labelledby="clientDropdownButton">
+                    <a class="dropdown-item client-option" href="#">All Clients</a>
+                    <% @clients.each do |client| %>
+                        <a class="dropdown-item client-option" href="#"><%= client %></a>
+                    <% end %>
                 </div>
             </div>
             <div class="dropdown mb-3" style="margin-left: 10px">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Status
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span><%= @current_status_filter || "All Status" %></span>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                <div class="dropdown-menu" aria-labelledby="statusDropdownButton">
+                    <a class="dropdown-item status-option" href="#">All Status</a>
+                    <% @statuses.each do |status| %>
+                        <a class="dropdown-item status-option" href="#"><%= status %></a>
+                    <% end %>
                 </div>
             </div>
         </div>
